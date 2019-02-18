@@ -1,11 +1,13 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class PhoneCamera : MonoBehaviour
+public class WebcamProjection : MonoBehaviour
 {
-    [SerializeField] RawImage background;
+    //[SerializeField] RawImage background;
     [SerializeField] Renderer screenRenderer;
     //[SerializeField] AspectRatioFitter fitter;
+    [SerializeField] TextMeshPro debugText;
 
     bool cameraAvailable;
     WebCamTexture backCamera;
@@ -13,7 +15,7 @@ public class PhoneCamera : MonoBehaviour
 
     void Start()
     {
-        defaultBackground = background.texture;
+        //defaultBackground = background.texture;
         WebCamDevice[] devices = WebCamTexture.devices;
 
         if (devices.Length == 0)
@@ -23,6 +25,12 @@ public class PhoneCamera : MonoBehaviour
             return;
         }
 
+#if UNITY_EDITOR || !UNITY_IOS
+        if (devices.Length > 0)
+        {
+            backCamera = new WebCamTexture(devices[0].name, Screen.width, Screen.height);
+        }
+#else
         for (int i = 0; i < devices.Length; ++i)
         {
             if (!devices[i].isFrontFacing)
@@ -31,6 +39,8 @@ public class PhoneCamera : MonoBehaviour
                 break;
             }
         }
+#endif
+
 
         if (backCamera == null)
         {
@@ -44,20 +54,20 @@ public class PhoneCamera : MonoBehaviour
         cameraAvailable = true;
     }
 
-    //void Update()
-    //{
-    //    if (!cameraAvailable)
-    //    {
-    //        return;
-    //    }
+    void Update()
+    {
+        debugText.text = "Webcams: " + WebCamTexture.devices.Length.ToString();
 
-    //    //float ratio = (float)backCamera.width / backCamera.height;
-    //    //fitter.aspectRatio = ratio;
+        if (cameraAvailable)
+        {
+            //float ratio = (float)backCamera.width / backCamera.height;
+            //fitter.aspectRatio = ratio;
 
-    //    //float scaleY = backCamera.videoVerticallyMirrored ? -1 : 1;
-    //    //background.rectTransform.localScale = new Vector3(1f, scaleY, 1f);
+            //float scaleY = backCamera.videoVerticallyMirrored ? -1 : 1;
+            //background.rectTransform.localScale = new Vector3(1f, scaleY, 1f);
 
-    //    //int orient = -backCamera.videoRotationAngle;
-    //    //background.rectTransform.localEulerAngles = new Vector3(0, 0, orient);
-    //}
+            //int orient = -backCamera.videoRotationAngle;
+            //background.rectTransform.localEulerAngles = new Vector3(0, 0, orient);
+        }
+    }
 }
