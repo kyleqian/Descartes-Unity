@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Vuforia;
+//using Vuforia;
 
 public class ExternalWebCam : MonoBehaviour
 {
@@ -17,12 +17,12 @@ public class ExternalWebCam : MonoBehaviour
 
     void Start()
     {
-        VuforiaRuntime.Instance.Deinit();
-        if (VuforiaUnity.SetDriverLibrary(Path.Combine(Application.dataPath, "lib", "armeabi-v7a", "libUVCDriver.so")))
-        {
-            debugText.text = "SetDriverLibrary!";
-        }
-        VuforiaRuntime.Instance.InitVuforia();
+        //VuforiaRuntime.Instance.Deinit();
+        //if (VuforiaUnity.SetDriverLibrary(Path.Combine(Application.dataPath, "lib", "armeabi-v7a", "libUVCDriver.so")))
+        //{
+        //    debugText.text = "SetDriverLibrary!";
+        //}
+        //VuforiaRuntime.Instance.InitVuforia();
 
         //defaultBackground = background.texture;
         WebCamDevice[] devices = WebCamTexture.devices;
@@ -34,7 +34,7 @@ public class ExternalWebCam : MonoBehaviour
             return;
         }
 
-#if UNITY_EDITOR || !UNITY_IOS
+#if UNITY_EDITOR
         if (devices.Length > 0)
         {
             backCamera = new WebCamTexture(devices[0].name, Screen.width, Screen.height);
@@ -65,7 +65,7 @@ public class ExternalWebCam : MonoBehaviour
 
     void Update()
     {
-        //debugText.text = "Webcams: " + WebCamTexture.devices.Length.ToString();
+        debugText.text = "Webcams: " + WebCamTexture.devices.Length.ToString();
 
         if (cameraAvailable)
         {
